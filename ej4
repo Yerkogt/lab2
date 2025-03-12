@@ -1,0 +1,87 @@
+import RPi.GPIO as GPIO
+import time
+c=0
+t=1
+led_pin_1 = 12  
+led_pin_2 = 16
+led_pin_3 = 24  
+led_pin_4 = 25
+button_pin1 = 18  
+button_pin2 = 23 
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(led_pin_1, GPIO.OUT)
+GPIO.setup(led_pin_2, GPIO.OUT)
+GPIO.setup(led_pin_3, GPIO.OUT)
+GPIO.setup(led_pin_4, GPIO.OUT)
+GPIO.setup(button_pin1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(button_pin2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        
+def contador():
+    global c
+    global t
+    if 	GPIO.input(button_pin1) == GPIO.LOW:
+        while GPIO.input(button_pin1) == GPIO.LOW:
+            time.sleep(0.2)
+        c=c+1
+        t=1
+    if 	GPIO.input(button_pin2) == GPIO.LOW:
+        while GPIO.input(button_pin2) == GPIO.LOW:
+            time.sleep(0.2)
+        t=t+1
+def estado_1():
+    global t
+    GPIO.output(led_pin_1, GPIO.HIGH)
+    time.sleep(t)
+    GPIO.output(led_pin_1, GPIO.LOW)
+    time.sleep(0.2)
+def estado_2():
+    global t
+    GPIO.output(led_pin_2, GPIO.HIGH)
+    time.sleep(t)
+    GPIO.output(led_pin_2, GPIO.LOW)
+    time.sleep(0.2)
+def estado_3():
+    global t
+    GPIO.output(led_pin_3, GPIO.HIGH)
+    time.sleep(t)
+    GPIO.output(led_pin_3, GPIO.LOW)
+    time.sleep(0.2)   
+def estado_4():
+    global t
+    GPIO.output(led_pin_4, GPIO.HIGH)
+    time.sleep(t)
+    GPIO.output(led_pin_4, GPIO.LOW)
+    time.sleep(0.2)    
+    
+def sistema():
+    global c
+    global t
+    while True:
+        contador()
+        print("Segundos ",t)
+        if c < 0:
+            c=0
+        elif c==0:
+            GPIO.output(led_pin_1, GPIO.LOW)
+            GPIO.output(led_pin_2, GPIO.LOW)
+            GPIO.output(led_pin_3, GPIO.LOW)
+            GPIO.output(led_pin_4, GPIO.LOW)
+        elif c==1:
+            estado_1()
+        elif c==2:
+            estado_2()
+        elif c==3:
+            estado_3()
+        elif c==4:
+            estado_4()
+        elif c==5:
+            c=1
+            
+try:
+    sistema()
+except KeyboardInterrupt:
+    GPIO.cleanup()
+
+
+

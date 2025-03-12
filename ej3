@@ -1,0 +1,38 @@
+import RPi.GPIO as GPIO
+import time
+import random
+
+n=0
+led_pin_1 = 12  
+led_pin_3 = 24
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(led_pin_1, GPIO.OUT)
+GPIO.setup(led_pin_3, GPIO.OUT)
+
+def estado_1():
+    GPIO.output(led_pin_1, GPIO.HIGH)
+    GPIO.output(led_pin_3, GPIO.LOW)
+def estado_2():
+    GPIO.output(led_pin_1, GPIO.LOW)
+    GPIO.output(led_pin_3, GPIO.HIGH)
+def estado_3():
+    GPIO.output(led_pin_1, GPIO.HIGH)
+    GPIO.output(led_pin_3, GPIO.HIGH)    
+def sistema():
+    global n
+    while True:
+        time.sleep(4)
+        n=random.randint(0,30)       
+        print("Temperatura: ",n,"C")
+        if n < 12:
+            estado_1()
+        elif n > 20:
+            estado_2()
+        elif ((n > 12) and (n < 20)):
+            estado_3()    
+try:
+    sistema()
+except KeyboardInterrupt:
+    GPIO.cleanup()
+
